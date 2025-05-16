@@ -16,8 +16,12 @@ fun ResultadoScreen(viewModel: FormularioViewModel) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text("Tu rutina recomendada:", style = MaterialTheme.typography.h5)
+        Text(text = "Tu rutina recomendada:", style = MaterialTheme.typography.h5)
         Spacer(modifier = Modifier.height(16.dp))
-        Text(rutina, style = MaterialTheme.typography.body1)
+        rutina?.let { 
+    Text(text = it.nombre, style = MaterialTheme.typography.body1)
+} ?: run { 
+    Text(text = "No hay rutina disponible", style = MaterialTheme.typography.body1)
+}
     }
 }

@@ -1,0 +1,48 @@
+package com.example.gymapp.viewmodel
+
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModel
+import com.example.gymapp.model.FormularioRespuestas
+import com.example.gymapp.model.Rutina
+import com.example.gymapp.repository.RutinaRepository // Asegúrate de importar el repositorio
+import android.content.Context
+
+class FormularioViewModel : ViewModel() {
+    var respuestas = mutableStateOf(FormularioRespuestas())
+    private lateinit var routines: RutinaRepository = RutinaRepository() // Cambiado a minúscula
+
+    init {
+        fun loadRoutines(context: Context) {
+            routines = RutinaRepository().obtenerRutinasDesdeJson(context) // Carga las rutinas desde el JSON
+        }
+        loadRoutines(null) // Debes pasar un contexto válido
+    }
+
+    fun actualizarRespuestas(nuevas: FormularioRespuestas) {
+        respuestas.value = nuevas
+    }
+
+    fun obtenerRutinaDesdeBD(): Rutina? {
+        val r = respuestas.value
+        return when {
+            r.objetivo == "hipertrofia" && r.nivel == "iniciacion" && r.peso != null && r.peso > 60 && r.altura != null && r.altura > 160 && r.cintura != null && r.cintura > 80 -> {
+                rutinaRepository.obtenerRutinas().firstOrNull { rutina -> rutina.nombre == "Rutina de Fuerza" }
+            }
+            r.objetivo == "hipertrofia" && r.nivel == "intermedio" -> {
+                rutinaRepository.obtenerRutinas().firstOrNull { rutina -> rutina.nombre == "Rutina de Fuerza" }
+            }
+            r.objetivo == "hipertrofia" && r.nivel == "avanzado" -> {
+                rutinaRepository.obtenerRutinas().firstOrNull { rutina -> rutina.nombre == "Rutina de Fuerza" }
+            }
+            r.objetivo == "perdida de peso" && r.nivel == "avanzado" -> {
+                rutinaRepository.obtenerRutinas().firstOrNull { rutina -> rutina.nombre == "Rutina de Fuerza" }
+            }
+            r.objetivo == "pérdida de peso" && r.problemaFisico == "espalda" -> {
+                rutinaRepository.obtenerRutinas().firstOrNull { rutina -> rutina.nombre == "Rutina de Cardio" }
+            }
+            else -> {
+                rutinaRepository.obtenerRutinas().firstOrNull { rutina -> rutina.nombre == "Rutina general de tonificación" }
+            }
+        }
+    }
+}
