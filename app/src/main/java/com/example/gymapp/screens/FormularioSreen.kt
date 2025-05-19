@@ -59,7 +59,7 @@ fun FormularioScreen(navController: NavController, viewModel: FormularioViewMode
                 Toast.makeText(context, "Completa todas las respuestas", Toast.LENGTH_SHORT).show()
             } else {
                 viewModel.actualizarRespuestas(r)
-                navController.navigate("resultado")
+                navController.navigate("resultadoScreen")
             }
         }) {
             Text("Continuar")
